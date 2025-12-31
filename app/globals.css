@@ -1,26 +1,97 @@
+@import url("https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&display=swap");
+@import url("https://db.onlinewebfonts.com/c/5da49843f66caf14799662bd12aa55a2?family=Dream+Avenue");
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+@theme {
+  --font-satoshi: var(--font-satoshi);
+  --font-clash: 'Clash Display', sans-serif;
+  --font-dream-avenue: 'Dream Avenue';
+  --color-midgray: #9DA5B2;
+  --color-theme-green: #7AB767;
+  --shadow-card: 0 6px 16px 0 rgba(112, 144, 176, 0.12);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  background: transparent;
+}
 
 :root {
-  --background: #ffffff;
+  --background: transparent;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: 'Satoshi', sans-serif; */
+}
+
+/* Hide hero CTA when mobile menu is open */
+body.mobile-menu-open .hero-cta-button {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Apple Vision Pro Glass - Built from scratch */
+.liquid-glass {
+  /* ZERO background - pure transparency, content MUST be visible */
+  background: transparent !important;
+
+  /* ALL the magic is in backdrop-filter - blur distorts but doesn't hide */
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+
+  /* Border defines the glass edge */
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+
+  /* Sharp, dark shadow for visibility */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.37) !important;
+}
+
+.liquid-glass:hover {
+  /* Still transparent on hover */
+  background: transparent !important;
+
+  /* Slightly stronger blur on hover */
+  -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+  backdrop-filter: blur(24px) saturate(200%) !important;
+
+  /* Brighter border */
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+
+  /* Stronger shadow */
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Frosted Glass - Better visibility for overlays like mobile menu */
+.frosted-glass {
+  /* Semi-transparent dark background for better contrast */
+  background: rgba(0, 0, 0, 0.7) !important;
+
+  /* Strong backdrop blur for frosted effect */
+  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
+  backdrop-filter: blur(40px) saturate(150%) !important;
+
+  /* Subtle border */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+  /* Soft shadow for depth */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
