@@ -40,8 +40,8 @@ export const Nav = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 h-auto flex justify-center items-center w-full px-5 md:px-8 transition-all duration-500">
-        <div className="w-full flex justify-between items-center px-2 py-3 rounded-2xl transition-all duration-500">
+      <div className="relative z-50 h-auto flex justify-center items-center w-full px-5 md:px-8 pt-4 transition-all duration-500 bg-transparent">
+        <div className="w-full flex justify-between items-center px-2 py-3 rounded-2xl transition-all duration-500 bg-transparent">
           {/* JOC Logo - Footer logo on mobile, regular logo on desktop */}
           <Image
             src={footerLogo}

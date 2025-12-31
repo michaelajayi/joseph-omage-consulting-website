@@ -22,31 +22,28 @@ export const ScrollButtons = () => {
       );
       const distanceFromBottom = documentHeight - (scrollPosition + windowHeight);
 
-      // Don't show anything at very top (within 50px from top)
+      // At very top: Hide everything
       if (scrollPosition < 50) {
         setShowScrollDown(false);
         setShowScrollUp(false);
       }
-      // Don't show anything at very bottom (within 50px from bottom)
-      else if (distanceFromBottom < 50) {
+      // At very bottom: Hide everything
+      else if (distanceFromBottom < 100) {
         setShowScrollDown(false);
         setShowScrollUp(false);
       }
-      // Near bottom (50-300px from bottom): Show down arrow to scroll back to bottom
-      else if (distanceFromBottom >= 50 && distanceFromBottom < 300) {
+      // Activation zone near top (50-300px): Activate DOWN arrow
+      else if (scrollPosition >= 50 && scrollPosition < 300) {
         setShowScrollDown(true);
         setShowScrollUp(false);
       }
-      // Near top (50-200px from top): Show down arrow to scroll down
-      else if (scrollPosition >= 50 && scrollPosition < 200) {
-        setShowScrollDown(true);
-        setShowScrollUp(false);
-      }
-      // In the middle: Show up arrow to scroll to top
-      else if (scrollPosition >= 200 && distanceFromBottom >= 300) {
+      // Activation zone near bottom (100-400px from bottom): Activate UP arrow
+      else if (distanceFromBottom >= 100 && distanceFromBottom < 400) {
         setShowScrollUp(true);
         setShowScrollDown(false);
       }
+      // Middle area: Keep whatever button is currently showing (persist state)
+      // Don't change anything - button stays visible
     };
 
     // Check initial state
