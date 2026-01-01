@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
-import { satoshi } from "@/utils/fonts";
+import { satoshi, clashDisplay } from "@/utils/fonts";
 import { LayoutProvider } from "./context/LayoutContext";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${satoshi.variable} overflow-x-hidden`}>
+    <html lang="en" className={`${satoshi.variable} ${clashDisplay.variable} overflow-x-hidden`}>
       <body className="antialiased overflow-x-hidden">
         <SmoothScrollProvider>
           <LayoutProvider>

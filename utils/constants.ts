@@ -121,19 +121,23 @@ export const faqs = [
 export const footerLinks = [
   {
     title: 'Home',
-    link: '/'
+    link: '#hero'
   },
   {
     title: 'About',
-    link: '/about'
+    link: '#about'
   },
   {
-    title: 'Properties',
-    link: '/properties'
+    title: 'Property',
+    link: '#properties'
   },
   {
     title: 'Services',
-    link: '/services'
+    link: '#services'
+  },
+  {
+    title: 'FAQs',
+    link: '#faqs'
   },
 ];
 

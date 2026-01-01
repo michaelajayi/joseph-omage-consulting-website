@@ -21,15 +21,26 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     const targetId = link.replace('#', '');
     const targetElement = document.getElementById(targetId);
 
-    if (targetElement && window.lenis) {
-      window.lenis.scrollTo(targetElement, {
-        duration: 1.5,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-      });
-    }
+    if (!targetElement) return;
 
-    // Close menu after clicking
+    // Immediately remove body lock to allow scrolling
+    document.body.classList.remove('mobile-menu-open');
+
+    // Close menu animation
     onClose();
+
+    // Scroll after menu starts closing (300ms to match animation)
+    setTimeout(() => {
+      if (window.lenis) {
+        window.lenis.scrollTo(targetElement, {
+          duration: 1.5,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+      } else {
+        // Fallback for when Lenis isn't available
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 350);
   };
 
   useEffect(() => {

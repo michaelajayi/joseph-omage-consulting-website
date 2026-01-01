@@ -1,11 +1,10 @@
-@import url("https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&display=swap");
 @import url("https://db.onlinewebfonts.com/c/5da49843f66caf14799662bd12aa55a2?family=Dream+Avenue");
 @import "tailwindcss";
 @import "lenis/dist/lenis.css";
 
 @theme {
   --font-satoshi: var(--font-satoshi);
-  --font-clash: 'Clash Display', sans-serif;
+  --font-clash: var(--font-clash);
   --font-dream-avenue: 'Dream Avenue';
   --color-midgray: #9DA5B2;
   --color-theme-green: #7AB767;
@@ -36,6 +35,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   /* font-family: 'Satoshi', sans-serif; */
+}
+
+/* Prevent scrolling when mobile menu is open */
+body.mobile-menu-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* Hide hero CTA when mobile menu is open */

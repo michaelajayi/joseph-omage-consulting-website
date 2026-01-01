@@ -14,6 +14,8 @@ export const ScrollButtons = () => {
   const [showScrollUp, setShowScrollUp] = useState(false);
   const [isLightBackground, setIsLightBackground] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
+  const scrollUpButtonRef = useRef<HTMLButtonElement>(null);
+  const scrollDownButtonRef = useRef<HTMLButtonElement>(null);
   const lastScrollY = useRef(0);
   const scrollThreshold = 5; // Very low threshold for instant response to scroll direction changes
 
@@ -104,7 +106,9 @@ export const ScrollButtons = () => {
     };
   }, []);
 
-  const scrollToTop = () => {
+  const scrollToTop = (e?: React.MouseEvent | React.TouchEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     console.log('Scroll to top clicked!');
     if (window.lenis) {
       window.lenis.scrollTo(0, {
@@ -117,7 +121,9 @@ export const ScrollButtons = () => {
     }
   };
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (e?: React.MouseEvent | React.TouchEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     console.log('Scroll to bottom clicked!');
     const maxScroll = Math.max(
       document.body.scrollHeight,
@@ -139,45 +145,57 @@ export const ScrollButtons = () => {
   const arrowColor = isLightBackground ? '#000000' : '#ffffff';
 
   return (
-    <div ref={buttonRef}>
+    <div ref={buttonRef} style={{ isolation: 'isolate', position: 'relative', zIndex: 10000 }}>
       {/* Scroll to Bottom Button */}
       <button
+        ref={scrollDownButtonRef}
         onClick={scrollToBottom}
+        onTouchEnd={scrollToBottom}
         type="button"
-        className={`fixed bottom-8 right-8 z-[9999] p-4 rounded-full liquid-glass transition-all duration-500 ease-in-out transform hover:scale-110 cursor-pointer ${
-          showScrollDown ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 rotate-180 pointer-events-none'
+        className={`fixed bottom-8 right-8 p-4 rounded-full liquid-glass transition-all duration-500 ease-in-out transform hover:scale-110 cursor-pointer touch-manipulation ${
+          showScrollDown ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 rotate-180'
         }`}
         aria-label="Scroll to bottom"
+        disabled={!showScrollDown}
         style={{
-          pointerEvents: showScrollDown ? 'auto' : 'none',
           width: '56px',
           height: '56px',
-          display: 'flex',
+          display: showScrollDown ? 'flex' : 'none',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation',
+          zIndex: 10000,
+          isolation: 'isolate'
         }}
       >
-        <ArrowDown01Icon size={24} color={arrowColor} strokeWidth={2} className="transition-colors duration-500" />
+        <ArrowDown01Icon size={24} color={arrowColor} strokeWidth={2} className="transition-colors duration-500 pointer-events-none" />
       </button>
 
       {/* Scroll to Top Button */}
       <button
+        ref={scrollUpButtonRef}
         onClick={scrollToTop}
+        onTouchEnd={scrollToTop}
         type="button"
-        className={`fixed bottom-8 right-8 z-[9999] p-4 rounded-full liquid-glass transition-all duration-500 ease-in-out transform hover:scale-110 cursor-pointer ${
-          showScrollUp ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 -rotate-180 pointer-events-none'
+        className={`fixed bottom-8 right-8 p-4 rounded-full liquid-glass transition-all duration-500 ease-in-out transform hover:scale-110 cursor-pointer touch-manipulation ${
+          showScrollUp ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 -rotate-180'
         }`}
         aria-label="Scroll to top"
+        disabled={!showScrollUp}
         style={{
-          pointerEvents: showScrollUp ? 'auto' : 'none',
           width: '56px',
           height: '56px',
-          display: 'flex',
+          display: showScrollUp ? 'flex' : 'none',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation',
+          zIndex: 10000,
+          isolation: 'isolate'
         }}
       >
-        <ArrowUp01Icon size={24} color={arrowColor} strokeWidth={2} className="transition-colors duration-500" />
+        <ArrowUp01Icon size={24} color={arrowColor} strokeWidth={2} className="transition-colors duration-500 pointer-events-none" />
       </button>
     </div>
   );

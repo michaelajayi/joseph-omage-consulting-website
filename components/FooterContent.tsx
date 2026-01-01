@@ -1,7 +1,29 @@
+'use client';
 import { contactus, footerLinks, footerSocialLinks } from "@/utils/constants";
 import Link from "next/link";
+import Lenis from 'lenis';
+
+declare global {
+  interface Window {
+    lenis?: Lenis;
+  }
+}
 
 const FooterContent = () => {
+  // Smooth scroll to section
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, link: string) => {
+    e.preventDefault();
+    const targetId = link.replace('#', '');
+    const targetElement = document.getElementById(targetId);
+
+    if (targetElement && window.lenis) {
+      window.lenis.scrollTo(targetElement, {
+        duration: 1.5,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
+    }
+  };
+
   return (
     <div className="w-full h-full flex justify-center items-center p-4 sm:p-6 md:p-8 lg:p-12">
       <div className="w-full p-4 sm:p-6 md:p-8 lg:p-12 liquid-glass rounded-[20px]">
@@ -41,7 +63,14 @@ const FooterContent = () => {
           {/* Navigation Links */}
           <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 sm:gap-5 md:gap-6">
             {footerLinks.map((link, index) => (
-              <Link href={link.link} key={index} className="font-clash text-midgray text-xs sm:text-sm hover:text-white transition-colors">{link.title}</Link>
+              <Link
+                href={link.link}
+                key={index}
+                onClick={(e) => handleNavClick(e, link.link)}
+                className="font-clash text-midgray text-xs sm:text-sm hover:text-white transition-colors"
+              >
+                {link.title}
+              </Link>
             ))}
           </div>
 
@@ -84,7 +113,12 @@ const FooterContent = () => {
             <div className="flex flex-col space-y-4">
               <h3 className="font-clash text-white text-lg font-semibold mb-6">Quick Links</h3>
               {footerLinks.map((link, index) => (
-                <Link href={link.link} key={index} className="font-clash text-white text-sm hover:text-midgray transition-colors">
+                <Link
+                  href={link.link}
+                  key={index}
+                  onClick={(e) => handleNavClick(e, link.link)}
+                  className="font-clash text-white text-sm hover:text-midgray transition-colors"
+                >
                   {link.title}
                 </Link>
               ))}
