@@ -5,8 +5,8 @@ const FooterContent = () => {
   return (
     <div className="w-full h-full flex justify-center items-center p-4 sm:p-6 md:p-8 lg:p-12">
       <div className="w-full p-4 sm:p-6 md:p-8 lg:p-12 liquid-glass rounded-[20px]">
-        {/* Mobile/Tablet Layout (keep as is) */}
-        <div className="lg:hidden flex flex-col space-y-6 md:space-y-8">
+          {/* Mobile/Tablet Layout (keep as is) */}
+          <div className="lg:hidden flex flex-col space-y-6 md:space-y-8">
           {/* Contact Information */}
           <div className="flex flex-col items-center md:items-start space-y-4 md:space-y-6 pt-6">
             {contactus.map((contact, index) => {

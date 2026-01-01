@@ -4,7 +4,7 @@ import { HeroContent } from "./HeroContent";
 
 const Hero = () => {
   return (
-    <section className="relative w-full h-dvh min-h-dvh">
+    <section className="relative w-full h-dvh min-h-dvh" data-theme="dark">
       {/* Background image */}
       <Image src={headerBackground01} alt='Modern real estate property' fill priority quality={100} sizes='100vw' className='object-cover object-center -z-10' />
 

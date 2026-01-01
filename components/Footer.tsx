@@ -4,7 +4,7 @@ import FooterContent from "./FooterContent";
 
 export const Footer = () => {
   return (
-    <div className="relative w-full h-auto border-t-2 border-white/30">
+    <div className="relative w-full h-auto border-t-2 border-white/30" data-theme="dark">
       {/* Background image */}
       <Image src={footerBg} alt='footer bg' fill quality={100} sizes="100vw" className='object-cover object-center' />
 

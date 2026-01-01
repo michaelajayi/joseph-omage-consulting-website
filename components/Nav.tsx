@@ -4,16 +4,41 @@ import Image from "next/image";
 import logo from '../public/logo.svg';
 import footerLogo from '../public/footer-logo.svg';
 import { navLinks } from "@/utils/constants";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { HamburgerButton } from "./HamburgerButton";
 import { MobileMenu } from "./MobileMenu";
+import { gsap } from "gsap";
 
 export const Nav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+  const navRef = useRef<HTMLDivElement>(null);
+
+  // Entrance animation on mount
+  useEffect(() => {
+    if (navRef.current) {
+      gsap.fromTo(
+        navRef.current,
+        {
+          opacity: 0,
+          y: -80,
+          scaleY: 0.3,
+          transformOrigin: "top center",
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scaleY: 1,
+          duration: 1,
+          ease: "power4.out",
+          delay: 0.2,
+        }
+      );
+    }
+  }, []);
 
   // Add scroll listener to detect when to show background
   useEffect(() => {
@@ -40,7 +65,7 @@ export const Nav = () => {
 
   return (
     <>
-      <div className="relative z-50 h-auto flex justify-center items-center w-full px-5 md:px-8 pt-4 transition-all duration-500 bg-transparent">
+      <div ref={navRef} className="fixed top-0 left-0 right-0 z-50 h-auto flex justify-center items-center w-full px-5 md:px-8 pt-4 transition-all duration-500 bg-transparent">
         <div className="w-full flex justify-between items-center px-2 py-3 rounded-2xl transition-all duration-500 bg-transparent">
           {/* JOC Logo - Footer logo on mobile, regular logo on desktop */}
           <Image

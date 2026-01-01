@@ -10,6 +10,7 @@ import featuredListingRightArrow from '../public/icons/featured-listing-right-ar
 import featuredListingLeftArrow from '../public/icons/featured-listing-left-arrow.svg'
 import Image from "next/image";
 import { useState } from "react";
+import ScrollAnimatedElement from "./ScrollAnimatedElement";
 
 const FeaturedListing = () => {
   const [isBeginning, setIsBeginning] = useState(true);
@@ -17,7 +18,7 @@ const FeaturedListing = () => {
 
   return (
     <>
-      <div className="w-full h-auto flex bg-[#F3F3F3] relative py-5 md:py-10">
+      <div className="w-full h-auto flex bg-[#F3F3F3] relative py-5 md:py-10" data-theme="light">
         {/* Custom prev and next navigation for slider - Hidden on mobile */}
         <div className="hidden md:flex justify-between items-center absolute inset-0 pointer-events-none">
           <Image
@@ -35,34 +36,38 @@ const FeaturedListing = () => {
         </div>
         <div className="flex flex-col space-y-4 md:space-y-1 w-full h-full px-4 sm:px-6 md:px-10 lg:px-20 py-10 md:py-20">
           <div className="w-full flex justify-center items-center">
-            <h3 className="font-dream-avenue text-black text-3xl sm:text-4xl md:text-5xl lg:text-[60px] flex justify-center items-center w-full uppercase text-center">Featured Listings</h3>
+            <ScrollAnimatedElement type="fadeInDown" duration={1} toggleActions="play reverse play reverse">
+              <h3 className="font-dream-avenue text-black text-3xl sm:text-4xl md:text-5xl lg:text-[60px] flex justify-center items-center w-full uppercase text-center">Featured Listings</h3>
+            </ScrollAnimatedElement>
           </div>
-          <div className="py-4">
-            <Swiper
-              spaceBetween={20}
-              slidesPerView={1}
-              grabCursor={true}
-              breakpoints={swiperBreakpoints}
-              className="w-full h-full !pb-4"
-              modules={[Navigation]}
-              navigation={{
-                prevEl: ".featured-listing-left-arrow",
-                nextEl: ".featured-listing-right-arrow",
-              }}
-              onReachBeginning={() => setIsBeginning(true)}
-              onReachEnd={() => setIsEnd(true)}
-              onSlideChange={(swiper) => {
-                setIsBeginning(swiper.isBeginning);
-                setIsEnd(swiper.isEnd);
-              }}
-            >
-              {listings && listings.map((listing, index) => (
-                <SwiperSlide key={index}>
-                  <ListingItem listing={listing} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+          <ScrollAnimatedElement type="fadeInUp" duration={1} delay={0.2} toggleActions="play reverse play reverse">
+            <div className="py-4">
+              <Swiper
+                spaceBetween={20}
+                slidesPerView={1}
+                grabCursor={true}
+                breakpoints={swiperBreakpoints}
+                className="w-full h-full !pb-4"
+                modules={[Navigation]}
+                navigation={{
+                  prevEl: ".featured-listing-left-arrow",
+                  nextEl: ".featured-listing-right-arrow",
+                }}
+                onReachBeginning={() => setIsBeginning(true)}
+                onReachEnd={() => setIsEnd(true)}
+                onSlideChange={(swiper) => {
+                  setIsBeginning(swiper.isBeginning);
+                  setIsEnd(swiper.isEnd);
+                }}
+              >
+                {listings && listings.map((listing, index) => (
+                  <SwiperSlide key={index}>
+                    <ListingItem listing={listing} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </ScrollAnimatedElement>
         </div>
       </div>
       {/* Mobile divider line - only visible on mobile/tablet */}

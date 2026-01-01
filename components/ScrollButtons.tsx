@@ -1,16 +1,19 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowUp01Icon, ArrowDown01Icon } from 'hugeicons-react';
+import Lenis from 'lenis';
 
 declare global {
   interface Window {
-    lenis?: any;
+    lenis?: Lenis;
   }
 }
 
 export const ScrollButtons = () => {
   const [showScrollDown, setShowScrollDown] = useState(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
+  const [isLightBackground, setIsLightBackground] = useState(false);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,10 +30,10 @@ export const ScrollButtons = () => {
         setShowScrollDown(false);
         setShowScrollUp(false);
       }
-      // At very bottom: Hide everything
+      // At very bottom: Show UP arrow (stay visible)
       else if (distanceFromBottom < 100) {
         setShowScrollDown(false);
-        setShowScrollUp(false);
+        setShowScrollUp(true);
       }
       // Activation zone near top (50-300px): Activate DOWN arrow
       else if (scrollPosition >= 50 && scrollPosition < 300) {
@@ -51,6 +54,33 @@ export const ScrollButtons = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Intersection Observer to detect background color
+  useEffect(() => {
+    if (!buttonRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const theme = entry.target.getAttribute('data-theme');
+            setIsLightBackground(theme === 'light');
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+        rootMargin: '0px'
+      }
+    );
+
+    const sections = document.querySelectorAll('[data-theme]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -84,8 +114,11 @@ export const ScrollButtons = () => {
     }
   };
 
+  // Dynamic arrow color based on background
+  const arrowColor = isLightBackground ? '#000000' : '#ffffff';
+
   return (
-    <>
+    <div ref={buttonRef}>
       {/* Scroll to Bottom Button */}
       <button
         onClick={scrollToBottom}
@@ -103,7 +136,7 @@ export const ScrollButtons = () => {
           justifyContent: 'center'
         }}
       >
-        <ArrowDown01Icon size={24} color="#ffffff" strokeWidth={2} />
+        <ArrowDown01Icon size={24} color={arrowColor} strokeWidth={2} className="transition-colors duration-500" />
       </button>
 
       {/* Scroll to Top Button */}
@@ -123,8 +156,8 @@ export const ScrollButtons = () => {
           justifyContent: 'center'
         }}
       >
-        <ArrowUp01Icon size={24} color="#ffffff" strokeWidth={2} />
+        <ArrowUp01Icon size={24} color={arrowColor} strokeWidth={2} className="transition-colors duration-500" />
       </button>
-    </>
+    </div>
   );
 };

@@ -11,7 +11,7 @@ export interface ScrollAnimatedElementProps
   extends Omit<React.HTMLAttributes<HTMLElement>, "ref">,
     ScrollAnimationConfig {
   children: React.ReactNode;
-  tag?: keyof JSX.IntrinsicElements;
+  tag?: React.ElementType;
 }
 
 const ScrollAnimatedElement = ({
