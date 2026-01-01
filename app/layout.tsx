@@ -17,6 +17,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${satoshi.variable} ${clashDisplay.variable} overflow-x-hidden`}>
+      <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Prevent browser extension errors
+            if (typeof window !== 'undefined' && !window.ethereum) {
+              Object.defineProperty(window, 'ethereum', {
+                value: {},
+                writable: true,
+                configurable: true
+              });
+            }
+          `
+        }} />
+      </head>
       <body className="antialiased overflow-x-hidden">
         <SmoothScrollProvider>
           <LayoutProvider>
