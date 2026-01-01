@@ -19,9 +19,9 @@ export const ListingItem = ({ listing }: {
   listing: ListingProps
 }) => {
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-bl-[20px] rounded-br-[20px] shadow-[0_2px_24px_-2px_rgba(0,0,0,0.08),0_8px_16px_-8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_32px_-2px_rgba(0,0,0,0.12),0_12px_24px_-8px_rgba(0,0,0,0.08)] transition-shadow duration-300">
+    <div className="w-full h-full flex flex-col bg-white rounded-bl-[20px] rounded-br-[20px] shadow-[0_2px_24px_-2px_rgba(0,0,0,0.08),0_8px_16px_-8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_32px_-2px_rgba(0,0,0,0.12),0_12px_24px_-8px_rgba(0,0,0,0.08)] transition-shadow duration-300 group">
       <div className="w-full h-60 sm:h-75 relative overflow-hidden">
-        <Image src={listing.image} alt={listing.title} fill className="object-cover object-center" />
+        <Image src={listing.image} alt={listing.title} fill className="object-cover object-center transition-transform duration-300 ease-in-out group-hover:scale-110" />
       </div>
       <div className="w-full flex flex-col space-y-3 p-4 sm:p-5">
         <div className="w-full flex flex-row justify-between items-start gap-2">

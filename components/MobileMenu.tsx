@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { navLinks } from "@/utils/constants";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -7,24 +11,85 @@ interface MobileMenuProps {
 }
 
 export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuRef.current) return;
+
+    if (isOpen) {
+      // Animate backdrop in
+      gsap.fromTo(
+        menuRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "power2.out" }
+      );
+
+      // Stagger animate the links (simple fade + subtle slide)
+      gsap.fromTo(
+        linksRef.current.filter(Boolean),
+        {
+          opacity: 0,
+          y: 20,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "power2.out",
+          delay: 0.1,
+        }
+      );
+
+      // Animate button
+      if (buttonRef.current) {
+        gsap.fromTo(
+          buttonRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", delay: 0.35 }
+        );
+      }
+    } else {
+      // Animate out - reverse stagger
+      gsap.to(linksRef.current.filter(Boolean).reverse(), {
+        opacity: 0,
+        y: -10,
+        duration: 0.2,
+        stagger: 0.05,
+        ease: "power2.in",
+      });
+
+      if (buttonRef.current) {
+        gsap.to(buttonRef.current, { opacity: 0, y: -10, duration: 0.2, ease: "power2.in" });
+      }
+
+      gsap.to(menuRef.current, { opacity: 0, duration: 0.3, delay: 0.2, ease: "power2.in" });
+    }
+  }, [isOpen]);
+
   return (
     <div
-      className={`lg:hidden fixed inset-0 z-40 bg-gradient-to-b from-black/75 via-black/50 to-black/25 backdrop-blur-md transition-all duration-500 ${
-        isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      ref={menuRef}
+      className={`lg:hidden fixed inset-0 z-40 bg-gradient-to-b from-black/75 via-black/50 to-black/25 backdrop-blur-md ${
+        isOpen ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
+      style={{ opacity: 0 }}
     >
       <div className="flex flex-col items-center justify-center h-full space-y-8 px-6">
         {navLinks.map((link, index) => (
           <Link
             href={link.link}
             key={index}
+            ref={(el) => { linksRef.current[index] = el; }}
             className='text-white font-clash text-2xl hover:opacity-70 transition-all drop-shadow-lg'
             onClick={onClose}
           >
             {link.title}
           </Link>
         ))}
-        <div className="pt-8">
+        <div ref={buttonRef} className="pt-8">
           <button
             className="font-clash text-black text-lg px-8 py-3 rounded-lg bg-white hover:bg-white/90 transition-all shadow-lg"
             onClick={onClose}
