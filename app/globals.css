@@ -95,3 +95,26 @@ body.mobile-menu-open .hero-cta-button {
     0 8px 32px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
+
+/* Custom Swiper Pagination Dots */
+.swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  background: #9DA5B2 !important;
+  opacity: 0.5 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: #7AB767 !important;
+  opacity: 1 !important;
+  width: 24px !important;
+  border-radius: 5px !important;
+}
+
+/* Hide pagination on desktop (md and up) */
+@media (min-width: 768px) {
+  .swiper-pagination {
+    display: none !important;
+  }
+}

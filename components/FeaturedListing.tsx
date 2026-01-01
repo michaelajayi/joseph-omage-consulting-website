@@ -2,10 +2,11 @@
 import { listings, swiperBreakpoints } from "@/utils/constants";
 import { ListingItem } from "./ListingItem";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 import featuredListingRightArrow from '../public/icons/featured-listing-right-arrow.svg'
 import featuredListingLeftArrow from '../public/icons/featured-listing-left-arrow.svg'
 import Image from "next/image";
@@ -18,7 +19,7 @@ const FeaturedListing = () => {
 
   return (
     <>
-      <div className="w-full h-auto flex bg-[#F3F3F3] relative py-5 md:py-10" data-theme="light">
+      <div id="properties" className="w-full h-auto flex bg-[#F3F3F3] relative py-5 md:py-10" data-theme="light">
         {/* Custom prev and next navigation for slider - Hidden on mobile */}
         <div className="hidden md:flex justify-between items-center absolute inset-0 pointer-events-none">
           <Image
@@ -47,11 +48,15 @@ const FeaturedListing = () => {
                 slidesPerView={1}
                 grabCursor={true}
                 breakpoints={swiperBreakpoints}
-                className="w-full h-full !pb-4"
-                modules={[Navigation]}
+                className="w-full h-full !pb-10 md:!pb-2"
+                modules={[Navigation, Pagination]}
                 navigation={{
                   prevEl: ".featured-listing-left-arrow",
                   nextEl: ".featured-listing-right-arrow",
+                }}
+                pagination={{
+                  clickable: true,
+                  enabled: true,
                 }}
                 onReachBeginning={() => setIsBeginning(true)}
                 onReachEnd={() => setIsEnd(true)}

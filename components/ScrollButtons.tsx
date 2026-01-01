@@ -14,6 +14,8 @@ export const ScrollButtons = () => {
   const [showScrollUp, setShowScrollUp] = useState(false);
   const [isLightBackground, setIsLightBackground] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(0);
+  const scrollThreshold = 5; // Very low threshold for instant response to scroll direction changes
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,9 +26,15 @@ export const ScrollButtons = () => {
         document.documentElement.scrollHeight
       );
       const distanceFromBottom = documentHeight - (scrollPosition + windowHeight);
+      const scrollDelta = scrollPosition - lastScrollY.current;
 
+      // Hide when hamburger menu is visible (10px - 300px scroll range)
+      if (scrollPosition > 10 && scrollPosition < 300) {
+        setShowScrollDown(false);
+        setShowScrollUp(false);
+      }
       // At very top: Hide everything
-      if (scrollPosition < 50) {
+      else if (scrollPosition <= 10) {
         setShowScrollDown(false);
         setShowScrollUp(false);
       }
@@ -35,8 +43,8 @@ export const ScrollButtons = () => {
         setShowScrollDown(false);
         setShowScrollUp(true);
       }
-      // Activation zone near top (50-300px): Activate DOWN arrow
-      else if (scrollPosition >= 50 && scrollPosition < 300) {
+      // Activation zone after hamburger disappears (300px+): Activate DOWN arrow
+      else if (scrollPosition >= 300 && scrollPosition < 500) {
         setShowScrollDown(true);
         setShowScrollUp(false);
       }
@@ -45,8 +53,21 @@ export const ScrollButtons = () => {
         setShowScrollUp(true);
         setShowScrollDown(false);
       }
-      // Middle area: Keep whatever button is currently showing (persist state)
-      // Don't change anything - button stays visible
+      // Middle area: Detect scroll direction and switch button
+      else if (Math.abs(scrollDelta) > scrollThreshold) {
+        if (scrollDelta > 0) {
+          // Scrolling down - show DOWN arrow to continue down
+          setShowScrollDown(true);
+          setShowScrollUp(false);
+        } else {
+          // Scrolling up - show UP arrow to continue up
+          setShowScrollUp(true);
+          setShowScrollDown(false);
+        }
+      }
+      // Keep whatever button is currently showing (persist state)
+
+      lastScrollY.current = scrollPosition;
     };
 
     // Check initial state

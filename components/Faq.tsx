@@ -38,7 +38,7 @@ const Faq = () => {
   }
 
   return (
-    <div ref={faqRef} className="w-full h-full flex justify-center items-center p-4 sm:p-6 md:p-10 lg:p-32 relative z-20" data-theme="light">
+    <div id="faqs" ref={faqRef} className="w-full h-full flex justify-center items-center p-4 sm:p-6 md:p-10 lg:p-32 relative z-20" data-theme="light">
       <ScrollAnimatedElement type="scaleIn" duration={1} toggleActions="play reverse play reverse" className="w-full h-full">
         <div className="w-full h-full bg-white rounded-[20px] border border-[#7AB767] flex flex-col space-y-6 md:space-y-10 p-4 sm:p-6 md:p-10 lg:p-20 shadow-2xl">
           <ScrollAnimatedElement type="fadeInDown" duration={0.8} delay={0.2} toggleActions="play reverse play reverse">

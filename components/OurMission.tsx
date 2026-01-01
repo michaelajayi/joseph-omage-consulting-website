@@ -23,7 +23,7 @@ const OurMission = () => {
     },
   ]
   return (
-    <div className="w-full min-h-[60vh] flex justify-center items-center relative py-10 md:py-0" data-theme="dark">
+    <div id="about" className="w-full min-h-[60vh] flex justify-center items-center relative py-10 md:py-0" data-theme="dark">
       {/* Text background image   */}
       <Image src={ourMissionTextureBg} alt='our mission texture bg' fill className='object-cover object-center w-full h-full opacity-25' />
 

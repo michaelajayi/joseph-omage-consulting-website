@@ -6,7 +6,7 @@ import ScrollAnimatedElement from './ScrollAnimatedElement';
 const OurServices = () => {
   return (
     <>
-    <div className="w-full h-full flex bg-[#F3F3F3] pb-10 md:pb-20" data-theme="light">
+    <div id="services" className="w-full h-full flex bg-[#F3F3F3] pb-10 md:pb-20" data-theme="light">
       <div className="w-full h-full flex justify-center items-center px-4 sm:px-6 md:px-10 py-10 md:py-20">
         <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20">
           <div className="lg:col-span-4">

@@ -13,6 +13,7 @@ import { gsap } from "gsap";
 export const Nav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLightBackground, setIsLightBackground] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
@@ -22,60 +23,60 @@ export const Nav = () => {
   const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const hamburgerRef = useRef<HTMLDivElement>(null);
+  const navContainerRef = useRef<HTMLDivElement>(null);
 
   // Entrance animation on mount
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Desktop logo from left
+      // Desktop logo fade in
       if (logoDesktopRef.current) {
         gsap.fromTo(
           logoDesktopRef.current,
-          { opacity: 0, x: -80 },
-          { opacity: 1, x: 0, duration: 0.8, ease: "power3.out", delay: 0.2 }
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.2 }
         );
       }
 
-      // Mobile logo from left
+      // Mobile logo fade in
       if (logoMobileRef.current) {
         gsap.fromTo(
           logoMobileRef.current,
-          { opacity: 0, x: -80 },
-          { opacity: 1, x: 0, duration: 0.8, ease: "power3.out", delay: 0.2 }
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.2 }
         );
       }
 
-      // Desktop nav links from right (staggered)
+      // Desktop nav links staggered fade
       const validLinks = navLinksRef.current.filter(Boolean);
       if (validLinks.length > 0) {
         gsap.fromTo(
           validLinks,
-          { opacity: 0, x: 60 },
+          { opacity: 0 },
           {
             opacity: 1,
-            x: 0,
             duration: 0.6,
             stagger: 0.1,
-            ease: "power3.out",
+            ease: "power2.out",
             delay: 0.3,
           }
         );
       }
 
-      // Desktop button from right
+      // Desktop button fade in
       if (buttonRef.current) {
         gsap.fromTo(
           buttonRef.current,
-          { opacity: 0, x: 60 },
-          { opacity: 1, x: 0, duration: 0.6, ease: "power3.out", delay: 0.6 }
+          { opacity: 0 },
+          { opacity: 1, duration: 0.6, ease: "power2.out", delay: 0.8 }
         );
       }
 
-      // Mobile hamburger from right
+      // Mobile hamburger fade in
       if (hamburgerRef.current) {
         gsap.fromTo(
           hamburgerRef.current,
-          { opacity: 0, x: 60 },
-          { opacity: 1, x: 0, duration: 0.8, ease: "power3.out", delay: 0.3 }
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, ease: "power2.out", delay: 0.3 }
         );
       }
     });
@@ -97,6 +98,44 @@ export const Nav = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Intersection Observer to detect background color - optimized for top-fixed element
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Filter entries that are actually visible in the top portion of viewport
+        const topEntries = entries.filter(entry => {
+          const rect = entry.boundingClientRect;
+          // Check if section is in the top 100px of viewport where hamburger sits
+          return rect.top < 100 && rect.bottom > 0;
+        });
+
+        // Find the most prominent section at the top
+        if (topEntries.length > 0) {
+          // Sort by how much of the section is visible at the top
+          const mostVisible = topEntries.reduce((prev, current) => {
+            const prevVisible = Math.min(prev.boundingClientRect.bottom, 100) - Math.max(prev.boundingClientRect.top, 0);
+            const currentVisible = Math.min(current.boundingClientRect.bottom, 100) - Math.max(current.boundingClientRect.top, 0);
+            return currentVisible > prevVisible ? current : prev;
+          });
+
+          const theme = mostVisible.target.getAttribute('data-theme');
+          setIsLightBackground(theme === 'light');
+        }
+      },
+      {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+        rootMargin: '-50px 0px -50% 0px' // Focus on top portion of viewport
+      }
+    );
+
+    const sections = document.querySelectorAll('[data-theme]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
+
   // Hide hero CTA button when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -106,28 +145,46 @@ export const Nav = () => {
     }
   }, [mobileMenuOpen]);
 
+  // Smooth scroll to section
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, link: string) => {
+    e.preventDefault();
+    const targetId = link.replace('#', '');
+    const targetElement = document.getElementById(targetId);
+
+    if (targetElement && window.lenis) {
+      window.lenis.scrollTo(targetElement, {
+        duration: 1.5,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
+    }
+  };
+
+  // Dynamic icon color based on background
+  const iconColor = isLightBackground ? '#000000' : '#ffffff';
+
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 h-auto flex justify-center items-center w-full px-5 md:px-8 pt-4 transition-all duration-500 bg-transparent">
-        <div className="w-full flex justify-between items-center px-2 py-3 rounded-2xl transition-all duration-500 bg-transparent">
+      {/* Main Nav - Absolute positioning, scrolls with page */}
+      <div className="absolute top-0 left-0 right-0 z-50 h-auto flex justify-center items-center w-full px-5 md:px-8 pt-4 bg-transparent">
+        <div className="w-full flex justify-between items-center px-2 py-3 rounded-2xl bg-transparent">
           {/* JOC Logo - Footer logo on mobile, regular logo on desktop */}
           <Image
             ref={logoMobileRef}
             src={footerLogo}
             alt='joc logo'
             priority
-            className="h-20 sm:h-30 md:h-28 lg:hidden w-auto"
+            className={`h-20 sm:h-30 md:h-28 lg:hidden w-auto ${isScrolled ? 'invisible' : 'visible'}`}
           />
           <Image
             ref={logoDesktopRef}
             src={logo}
             alt='joc logo'
             priority
-            className="hidden lg:block h-25 w-auto"
+            className={`hidden lg:block h-25 w-auto ${isScrolled ? 'invisible' : 'visible'}`}
           />
 
           {/* Desktop Nav Links - Hidden on mobile */}
-          <div className="hidden lg:flex space-x-6 items-center">
+          <div className={`hidden lg:flex space-x-6 items-center ${isScrolled ? 'invisible' : 'visible'}`}>
             {/* Nav links */}
             <div className="flex space-x-10 items-center">
               {navLinks.map((link, index) => (
@@ -135,6 +192,7 @@ export const Nav = () => {
                   href={link.link}
                   key={index}
                   ref={(el) => { navLinksRef.current[index] = el; }}
+                  onClick={(e) => handleNavClick(e, link.link)}
                   className='text-white font-clash text-[18px] hover:opacity-50 transition-all'
                 >
                   {link.title}
@@ -151,13 +209,34 @@ export const Nav = () => {
             </button>
           </div>
 
-          {/* Mobile Hamburger Menu Button */}
-          <div ref={hamburgerRef} className="lg:hidden">
+          {/* Hamburger Menu Button - Mobile only, completely hidden when scrolled */}
+          <div ref={hamburgerRef} className={`lg:hidden ${isScrolled ? 'invisible' : 'visible'}`}>
             <HamburgerButton
               isOpen={mobileMenuOpen}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              color="#ffffff"
             />
           </div>
+        </div>
+      </div>
+
+      {/* Fixed Hamburger Menu - Only visible when scrolled */}
+      <div
+        ref={navContainerRef}
+        className={`fixed top-0 right-0 z-50 px-5 md:px-8 pt-4 transition-all duration-700 ease-out ${
+          isScrolled
+            ? 'opacity-100 translate-y-0 translate-x-0 scale-100 rotate-0'
+            : 'opacity-0 -translate-y-8 translate-x-8 scale-50 rotate-12 pointer-events-none'
+        }`}
+      >
+        <div
+          className="liquid-glass rounded-[40%] px-2.5 py-2 transition-all duration-700"
+        >
+          <HamburgerButton
+            isOpen={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            color={iconColor}
+          />
         </div>
       </div>
 

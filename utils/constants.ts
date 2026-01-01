@@ -191,19 +191,23 @@ export const contactus = [
 export const navLinks = [
   {
     title: 'Home',
-    link: '/',
-  },
-  {
-    title: 'Property',
-    link: '/property',
+    link: '#hero',
   },
   {
     title: 'About',
-    link: '/about',
+    link: '#about',
+  },
+  {
+    title: 'Property',
+    link: '#properties',
   },
   {
     title: 'Services',
-    link: '/services'
+    link: '#services'
+  },
+  {
+    title: 'FAQs',
+    link: '#faqs'
   }
 ];
 
